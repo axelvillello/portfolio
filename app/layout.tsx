@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -24,8 +25,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="p-4 dark:bg-black">
-          <h1 className="text-7xl text-center font-semibold tracking-widest">Axel Ello</h1>
+        <header className="p-4 dark:bg-white">
+          <h1 className="text-7xl text-center font-semibold tracking-widest p-2 dark:bg-black max-w-5xl mx-auto">Axel Ello</h1>
+          <nav className="text-3xl text-center flex flex-auto justify-center gap-4 p-2 dark:bg-black max-w-5xl mx-auto">
+            <Link href="/">Home</Link>
+            <Link href="/projects">Projects</Link>
+            <Link href="/education">Education</Link>
+            <Link href="/work">Work Experience</Link>
+          </nav>
         </header>
         <main className="flex-1 flex">{children}</main>
         <footer className="p-1">
