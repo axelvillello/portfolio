@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <header className="p-4 dark:bg-white">
           <h1 className="text-7xl text-center font-semibold tracking-widest p-2 dark:bg-black max-w-5xl mx-auto">Axel Ello</h1>
-          <nav className="text-3xl text-center flex flex-auto justify-center gap-4 p-2 dark:bg-black max-w-5xl mx-auto">
+          <nav className="text-3xl text-center flex flex-auto justify-center gap-4 p-2 dark:bg-black max-w-5xl mx-auto ">
             <Link href="/">Home</Link>
             <Link href="/projects">Projects</Link>
             <Link href="/education">Education</Link>
@@ -35,8 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
         <main className="flex-1 flex">{children}</main>
-        <footer className="p-1">
-          <p className="font-semibold ml-5">2026, Axel Ello</p>
+        <footer className="p-2">
+          <p className="font-semibold ml-5 text-right">2026, Axel Ello</p>
         </footer>
       </body>
     </html>
