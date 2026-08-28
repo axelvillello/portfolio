@@ -1,52 +1,92 @@
 'use client'
- 
-import { useState } from 'react'
-import dynamic from 'next/dynamic'
- 
+
+import { useState, useEffect, useRef, cloneElement } from 'react';
+import dynamic from 'next/dynamic';
+
 // Client Components:
-const About= dynamic(() => import('./about/page'))
-const Projects = dynamic(() => import('./projects/page'))
-const Education = dynamic(() => import('./education/page'), { ssr: false }) //Client side loading only test
+const About= dynamic(() => import('./about/page'));
+const Projects = dynamic(() => import('./projects/page'));
+const Education = dynamic(() => import('./education/page'));
+const Work = dynamic(() => import('./work/page'));
+const pages = 
+[
+  { id: 1, component: About},
+  { id: 2, component: Projects},
+  { id: 3, component: Education},
+  { id: 4, component: Work}
+];
 
 // Intersection Observer Options
-const options = {
+const options = 
+{
   root: null,
   rootMargin: "0px",
   scrollMargin: "0px",
   threshold: 1.0,
 };
 
-// Dummy callback function 
-const callback = (entries, observer) => {
-  entries.forEach((entry) => {
-    entry.boundingClientRect
-    entry.intersectionRatio
-    entry.intersectionRect
-    entry.isIntersecting
-    entry.rootBounds
-    entry.target
-    entry.time
-  });
-};
+export default function Home() 
+{
+  //const [showMore, setShowMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [loadedPages, setLoadedPages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-const observer = new IntersectionObserver(callback, options);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-export default function Home() {
-  const [showMore, setShowMore] = useState(false)
- 
+  const loadNextPage = () =>
+  {
+    const nextPage = currentPage + 1;
+    if (loading || nextPage > pages.length) return;
+
+    setLoading(true);
+    setLoadedPages(prevPages => [...prevPages, pages.find(p => p.id === nextPage).component]);
+    setCurrentPage(nextPage);
+    setLoading(false);  
+  }
+  // useEffect to access the the IntersectionObserver from the browser API
+  useEffect(() => 
+  { 
+    if (!observerTarget.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => 
+        {
+          if (entries[0].isIntersecting && !loading && currentPage < pages.length) loadNextPage();
+        }, 
+        { threshold: 0.1 }
+      );
+
+      observer.observe(observerTarget.current);
+
+      // Clean up for multiple 
+      return () => 
+      {
+        observer.disconnect();
+      };
+  }, [currentPage, loading]);
+
   return (
-    <div className="flex flex-col w-full">
-      {/* Load immediately, but in a separate client bundle */}
-      <About />
- 
-      {/* Testing load on demand, only when/if the condition is met */}
-      {showMore && <Projects />}
-      <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-white p-4">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowMore(!showMore)}>Toggle</button>
+    <div className="flex flex-col w-full dark:bg-white">
+
+      {/* Testing infinite scroll loading */}
+      <div className="infinite-scroll-items">
+        {loadedPages.map((loadedPage, index) => 
+          {
+            const ComponentToRender = loadedPage;
+            return <ComponentToRender key={index} />;
+          }
+        )}
       </div>
- 
-      {/* Load only on the client side */}
-      <Education />
+
+      <div 
+        ref={observerTarget} 
+        className="infinite-scroll-trigger flex items-center justify-center"
+      >
+        {loading && (
+          <div className="loading-spinner animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        )}
+      </div>
     </div>
   )
 }
