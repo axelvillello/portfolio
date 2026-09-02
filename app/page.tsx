@@ -20,7 +20,7 @@ const pages =
 const options = 
 {
   root: null,
-  rootMargin: "0px",
+  rootMargin: "0px 0px 500% 0px",
   scrollMargin: "0px",
   threshold: 1.0,
 };
@@ -34,8 +34,7 @@ export default function Home()
 
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  const loadNextPage = () =>
-  {
+  const loadNextPage = () => {
     const nextPage = currentPage + 1;
     if (loading || nextPage > pages.length) return;
 
@@ -45,8 +44,7 @@ export default function Home()
     setLoading(false);  
   }
   // useEffect to access the the IntersectionObserver from the browser API
-  useEffect(() => 
-  { 
+  useEffect(() => { 
     if (!observerTarget.current) return;
 
     const observer = new IntersectionObserver(
@@ -60,8 +58,7 @@ export default function Home()
       observer.observe(observerTarget.current);
 
       // Clean up for multiple 
-      return () => 
-      {
+      return () => {
         observer.disconnect();
       };
   }, [currentPage, loading]);
@@ -71,8 +68,7 @@ export default function Home()
 
       {/* Testing infinite scroll loading */}
       <div className="infinite-scroll-items">
-        {loadedPages.map((loadedPage, index) => 
-          {
+        {loadedPages.map((loadedPage, index) => {
             const ComponentToRender = loadedPage;
             return <ComponentToRender key={index} />;
           }

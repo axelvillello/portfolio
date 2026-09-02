@@ -22,12 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth snap-both snap-mandatory scroll-pt-20`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="p-4 dark:bg-white">
-          <h1 className="text-7xl text-center font-semibold tracking-widest p-2 dark:bg-black max-w-5xl mx-auto">Axel Ello</h1>
-          <nav className="text-3xl text-center flex flex-auto justify-center gap-4 p-2 dark:bg-black max-w-5xl mx-auto ">
+        <header className="p-4 dark:bg-white sticky top-0">
+          <h1 className="text-5xl text-center font-semibold tracking-widest p-2 dark:bg-black max-w-5xl mx-auto">Axel Ello</h1>
+          <nav className="text-2xl text-center flex flex-auto justify-center gap-4 p-2 dark:bg-black max-w-5xl mx-auto ">
             <Link href="/">Home</Link>
             <Link href="/projects">Projects</Link>
             <Link href="/education">Education</Link>
